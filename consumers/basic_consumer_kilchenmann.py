@@ -53,8 +53,8 @@ def process_message(log_file) -> None:
 
             # monitor and alert on special conditions
             if "Cleveland" in message:
-                print(f"ALERT: Cleveland! \n{message}")
-                logger.warning(f"ALERT: Cleveland! \n{message}")
+                print(f"ALERT: Cleveland!")
+                logger.warning(f"ALERT: Cleveland!")
 
 
 #####################################
