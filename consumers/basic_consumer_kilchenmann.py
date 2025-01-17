@@ -52,9 +52,9 @@ def process_message(log_file) -> None:
             print(f"Consumed log message: {message}")
 
             # monitor and alert on special conditions
-            if "I just woke up" in message:
-                print(f"ALERT: You must have overslept! \n{message}")
-                logger.warning(f"ALERT: You must have overslept! \n{message}")
+            if "Cleveland" in message:
+                print(f"ALERT: Cleveland! \n{message}")
+                logger.warning(f"ALERT: Cleveland! \n{message}")
 
 
 #####################################
