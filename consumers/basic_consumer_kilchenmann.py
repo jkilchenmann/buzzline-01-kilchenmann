@@ -33,6 +33,7 @@ def process_message(log_file) -> None:
         print("Consumer is ready and waiting for a new log message...")
 
         last_position = file.tell()  # Start at the end of the file
+        processed_lines = set()  # Keep track of processed messages
 
         while True:
             file.seek(last_position)  # Move to the last known position
@@ -46,6 +47,12 @@ def process_message(log_file) -> None:
 
             # Process the line
             message = line.strip()
+
+            # Skip already processed messages
+            if message in processed_lines:
+                continue
+            processed_lines.add(message)  # Mark this line as processed
+
             print(f"Consumed log message: {message}")
 
             # Monitor and alert on special conditions
