@@ -32,18 +32,16 @@ def process_message(log_file) -> None:
         file.seek(0, os.SEEK_END)
         print("Consumer is ready and waiting for a new log message...")
 
-        # Use while True loop so the consumer keeps running forever
-        last_position = file.tell()  # Track the last position in the file
+        last_position = file.tell()  # Start at the end of the file
 
         while True:
-            # Check if new data is available
             file.seek(last_position)  # Move to the last known position
             line = file.readline()
-            last_position = file.tell()  # Update to the current position
+            last_position = file.tell()  # Update the position after reading
 
-            # Ignore empty lines or lines with just whitespace
+            # If the line is empty, no new message is available
             if not line.strip():
-                time.sleep(0.2)  # Adjust polling frequency to reduce tight looping
+                time.sleep(2.5)  # Sleep slightly less than the producer interval
                 continue
 
             # Process the line
@@ -54,9 +52,6 @@ def process_message(log_file) -> None:
             if "Cleveland" in message:
                 print(f"ALERT: Cleveland!")
                 logger.warning(f"Cleveland!")
-
-            # Adjust polling frequency to align with producer
-            time.sleep(0.5)  # Poll less frequently to match producer's interval
 
 #####################################
 # Define main function for this script.
