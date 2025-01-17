@@ -19,6 +19,8 @@ from utils.utils_logger import logger, get_log_file_path
 # Define a function to process a single message
 # #####################################
 
+import time
+from datetime import datetime, timedelta
 
 def process_message(log_file) -> None:
     """
@@ -34,6 +36,7 @@ def process_message(log_file) -> None:
 
         last_position = file.tell()  # Start at the end of the file
         processed_lines = set()  # Keep track of processed messages
+        alert_times = {}  # Store timestamps for recent alerts
 
         while True:
             file.seek(last_position)  # Move to the last known position
@@ -57,8 +60,18 @@ def process_message(log_file) -> None:
 
             # Monitor and alert on special conditions
             if "Cleveland" in message:
+                now = datetime.now()
+                # Check if we need to throttle the alert for "Cleveland"
+                if "Cleveland" in alert_times:
+                    last_alert_time = alert_times["Cleveland"]
+                    if now - last_alert_time < timedelta(seconds=2):
+                        # Skip alert if it's too soon after the last one
+                        continue
+
+                # Log and print the alert
                 print(f"ALERT: Cleveland!")
                 logger.warning(f"Cleveland!")
+                alert_times["Cleveland"] = now  # Update the last alert time
 
 #####################################
 # Define main function for this script.
