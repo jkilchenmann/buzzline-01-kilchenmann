@@ -34,43 +34,29 @@ def process_message(log_file) -> None:
 
         # Use while True loop so the consumer keeps running forever
         last_position = file.tell()  # Track the last position in the file
-        processed_messages = set()  # To track recently processed messages
 
         while True:
-            file.seek(last_position)  # Ensure the file pointer is in the correct place
+            # Check if new data is available
+            file.seek(last_position)  # Move to the last known position
             line = file.readline()
-            last_position = file.tell()  # Update the position after reading
+            last_position = file.tell()  # Update to the current position
 
-            # Debug: Log the file pointer position
-            print(f"DEBUG: File pointer is at {last_position}")
-
-            # If the line is empty, wait for a new log entry
-            if not line:
-                time.sleep(1)  # Wait for a second before checking again
+            # Ignore empty lines or lines with just whitespace
+            if not line.strip():
+                time.sleep(0.2)  # Adjust polling frequency to reduce tight looping
                 continue
 
-            # Debug: Print the raw line read from the file
-            print(f"DEBUG: Raw line read: {repr(line)}")
-
-            # Strip whitespace and handle the message
+            # Process the line
             message = line.strip()
-
-            # Skip duplicate or empty messages
-            if not message or message in processed_messages:
-                continue
-            processed_messages.add(message)
-
-            # Debug: Print the message being processed
-            print(f"DEBUG: Processing message: {message}")
-
-            # Limit the size of the memory set
-            if len(processed_messages) > 1000:
-                processed_messages.pop()
+            print(f"Consumed log message: {message}")
 
             # Monitor and alert on special conditions
             if "Cleveland" in message:
                 print(f"ALERT: Cleveland!")
                 logger.warning(f"Cleveland!")
+
+            # Adjust polling frequency to align with producer
+            time.sleep(0.5)  # Poll less frequently to match producer's interval
 
 #####################################
 # Define main function for this script.
