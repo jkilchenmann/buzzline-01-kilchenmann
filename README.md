@@ -1,4 +1,4 @@
-# buzzline-01-case
+# buzzline-01-kilchenmann
 
 This project introduces streaming data. 
 The Python language includes generators - we'll use this feature to generate some streaming buzzline messages. 
@@ -67,13 +67,13 @@ Windows PowerShell:
 
 ```shell
 .venv\Scripts\activate
-py -m producers.basic_producer_case
+py -m producers.basic_producer_kilchenmann
 ```
 
 Mac/Linux:
 ```zsh
 source .venv/bin/activate
-python3 -m producers.basic_producer_case
+python3 -m producers.basic_producer_kilchenmann
 ```
 
 ## Task 5. Monitor an Active Log File (Terminal 2)
@@ -87,14 +87,20 @@ Use the commands below to activate .venv, and run the file as a module.
 Windows:
 ```shell
 .venv\Scripts\activate
-py -m consumers.basic_consumer_case
+py -m consumers.basic_consumer_kilchenmann
 ```
 
 Mac/Linux:
 ```zsh
 source .venv/bin/activate
-python3 -m consumers.basic_consumer_case
+python3 -m consumers.basic_consumer_kilchenmann
 ```
+
+## Task 6. Ensure Monitoring is Correct
+
+If the producer and consumer are working correctly, the consumer will give an alert everytime
+"Cleveland" appears in the consumer.  It will be easy to see because it will be in yellow text
+compared to the rest of the white text.
 
 ## Save Space
 To save disk space, you can delete the .venv folder when not actively working on this project.
