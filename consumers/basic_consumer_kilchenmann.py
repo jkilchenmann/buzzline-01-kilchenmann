@@ -33,25 +33,34 @@ def process_message(log_file) -> None:
         print("Consumer is ready and waiting for a new log message...")
 
         # Use while True loop so the consumer keeps running forever
-        while True:
+        last_position = file.tell()
+        processed_messages = set()  # To track recently processed messages
 
-            # Read the next line of the file
+        while True:
+            file.seek(last_position)  # Ensure the file pointer is in the correct place
             line = file.readline()
+            last_position = file.tell()  # Update the position after reading
 
             # If the line is empty, wait for a new log entry
             if not line:
-                # Wait a second for a new log entry
-                delay_seconds = 1
-                time.sleep(delay_seconds)
-                # Keep checking for new log entries
+                time.sleep(1)  # Wait for a second before checking again
                 continue
 
             # We got a new log entry!
-            # Remove any leading/trailing white space and log the message
             message = line.strip()
+
+            # Avoid reprocessing the same message
+            if message in processed_messages:
+                continue
+            processed_messages.add(message)
+
+            # Limit the size of the memory set to avoid memory issues
+            if len(processed_messages) > 1000:
+                processed_messages.pop()
+
             print(f"Consumed log message: {message}")
 
-            # monitor and alert on special conditions
+            # Monitor and alert on special conditions
             if "Cleveland" in message:
                 print(f"ALERT: Cleveland!")
                 logger.warning(f"Cleveland!")
