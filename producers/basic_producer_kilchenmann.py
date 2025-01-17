@@ -83,7 +83,7 @@ def generate_messages():
         action = random.choice(ACTION)
         city_1 = random.choice(CITY_1)
         city_2 = random.choice(CITY_2)
-        yield f"I just {action}.  I was supposed to be in {city_1}, but I ented up in {city_2}!"
+        yield f"I just {action}.  I was supposed to be in {city_1}, but I ended up in {city_2}!"
 
 
 #####################################
