@@ -33,7 +33,7 @@ def process_message(log_file) -> None:
         print("Consumer is ready and waiting for a new log message...")
 
         # Use while True loop so the consumer keeps running forever
-        last_position = file.tell()
+        last_position = file.tell()  # Track the last position in the file
         processed_messages = set()  # To track recently processed messages
 
         while True:
@@ -41,30 +41,36 @@ def process_message(log_file) -> None:
             line = file.readline()
             last_position = file.tell()  # Update the position after reading
 
+            # Debug: Log the file pointer position
+            print(f"DEBUG: File pointer is at {last_position}")
+
             # If the line is empty, wait for a new log entry
             if not line:
                 time.sleep(1)  # Wait for a second before checking again
                 continue
 
-            # We got a new log entry!
+            # Debug: Print the raw line read from the file
+            print(f"DEBUG: Raw line read: {repr(line)}")
+
+            # Strip whitespace and handle the message
             message = line.strip()
 
-            # Avoid reprocessing the same message
-            if message in processed_messages:
+            # Skip duplicate or empty messages
+            if not message or message in processed_messages:
                 continue
             processed_messages.add(message)
 
-            # Limit the size of the memory set to avoid memory issues
+            # Debug: Print the message being processed
+            print(f"DEBUG: Processing message: {message}")
+
+            # Limit the size of the memory set
             if len(processed_messages) > 1000:
                 processed_messages.pop()
-
-            print(f"Consumed log message: {message}")
 
             # Monitor and alert on special conditions
             if "Cleveland" in message:
                 print(f"ALERT: Cleveland!")
                 logger.warning(f"Cleveland!")
-
 
 #####################################
 # Define main function for this script.
